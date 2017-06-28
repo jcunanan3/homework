@@ -1,0 +1,20 @@
+import scrapy
+from rv_scrapy_2.items import RvScrapy2Item
+from bs4 import BeautifulSoup as bs
+
+
+class RVBaseSpider(scrapy.Spider):
+	name = "RVBase"
+	start_urls = ['https://sfbay.craigslist.org/search/rva']
+
+	def parse(self,response):
+		#/'//span[@class="company"]/span'
+		#//h2/a/@title'
+		rv_price = response.xpath('//p[@class="result-info"]/span[@class="result-meta"]/span[@class="result-price"]/text()').extract()
+    rvs = [r.encode('utf-8') for r in rv_price]
+    rvs = [int(r) for r in rv_price]
+    for k in rv_price:
+      item=RvScrapy2Item()
+      item.rv_price=k
+
+		
